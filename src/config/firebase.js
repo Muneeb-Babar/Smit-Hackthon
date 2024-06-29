@@ -1,53 +1,47 @@
-
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail} from "firebase/auth";
-import { getFirestore,collection, getDocs,doc, getDoc,addDoc,setDoc,where, query } from "firebase/firestore";
-import { auth,db } from "./firconfig";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+import Swal from 'sweetalert2';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCoc-dAu8YphDOfm1RXrWWTl18VYvpMvxY",
+  authDomain: "saylani-final-project-af57c.firebaseapp.com",
+  projectId: "saylani-final-project-af57c",
+  storageBucket: "saylani-final-project-af57c.appspot.com",
+  messagingSenderId: "325761272723",
+  appId: "1:325761272723:web:386dc19b733797afe8f666",
+  measurementId: "G-YPP7JJS7BV"
+};
 
-// // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBLqwOxwbWF89ZVE-Hx6Oauw9eIuy8Syp0",
-//   authDomain: "test-project-67367.firebaseapp.com",
-//   projectId: "test-project-67367",
-//   storageBucket: "test-project-67367.appspot.com",
-//   messagingSenderId: "986217264801",
-//   appId: "1:986217264801:web:ed5c55b76ba4fe71a322e0"
-// };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-//   // Initialize Firebase
-//   const app = initializeApp(firebaseConfig);
-//   const auth = getAuth(app);
-//   const db = getFirestore(app);
-  
+export async function register(userDetails) {
+    const { name, email, password } = userDetails;
 
+    const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password);
 
+    const userRef = doc(db, 'users', uid);
+    await setDoc(userRef, { name, email, password });
 
+    Swal.fire({
+        title: "Good job!",
+        text: "Register Successful!",
+        icon: "success"
+    });
+}
 
-  export async function SignSetup({ email, password, name }) {
-    try {
-      const res = await createUserWithEmailAndPassword(auth, email, password,name);
-      // console.log(res);
-      await setDoc(doc(db, "users", res.user.uid), {
-        name,
-        email
-      });
-      return res;
-    } catch (e) {
-      alert(e.message);
-    }
-  }
-  
-  export async function LoginSetup({ email, password }) {
-    try {
-      const res = await signInWithEmailAndPassword(auth, email, password);
-      console.log(res);
-      return res;
-    } catch (e) {
-      alert(e.message);
-    }
-  }
-  
+export async function logIn(userDetails) {
+    const { email, password } = userDetails;
 
+    await signInWithEmailAndPassword(auth, email, password);
 
-// export { auth };
+    Swal.fire({
+        title: "Good job!",
+        text: "Sign In Successful!",
+        icon: "success"
+    });
+}
+
+export { auth };

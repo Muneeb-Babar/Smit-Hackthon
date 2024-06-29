@@ -1,7 +1,7 @@
 import '../../css/signup.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { SignSetup } from '../../config/firebase';
+import { register } from '../../config/firebase';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -23,15 +23,18 @@ function SignUp() {
       return;
     }
 
-    const res = await SignSetup({ email, password, name });
-    console.log(res);
+    try{
 
-    if (res) {
-      navigate('/login');
-    } else {
-      alert('Invalid signup. Please try again.');
+      const res = await register({ email, password, name });
+      console.log(res);
+        navigate('/login');
+      
     }
-  };
+    catch(e){
+      alert(e.message)
+    }
+  }
+  
 
   return (
     <div>

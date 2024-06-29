@@ -1,40 +1,37 @@
 import '../../css/login.css'
 import {useNavigate} from 'react-router-dom'
 import { useState } from 'react'
-import { LoginSetup } from '../../config/firebase'
+import { logIn } from '../../config/firebase'
 
 function Login(){
     const navigate=useNavigate()
-    const [users, setUsers] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
 
-const checkLogIn=async()=>{
-try{
-    const res=await LoginSetup({users,password})
-    console.log(res)
-    if(!users||!password){
-        alert('Enter All Values')
-        return
+    const checkLogIn = async () => {
+        try {
+            if (!email || !password) {
+                alert('Enter All Values');
+                return;
+            }
+            const res = await logIn({ email, password });
+            console.log(res);
+                // Assuming LoginSetup returns a truthy value when login is successful
+                navigate('/')}
+         catch (error) {
+            alert(error.message);
+        }
     }
-    if (res) {
-        // Assuming LoginSetup returns a truthy value when login is successful
-        navigate('/');
-    } else {
-        alert('Invalid . Please login again.');
-    }
-}
-    catch(e){
-    alert(e.mesage)
-    } 
-
-}
+    
 const handleUserInput = (e) => {
-    setUsers(e.target.value)
+    setEmail(e.target.value);
 }
 
 const handlePasswordInput = (e) => {
-    setPassword(e.target.value)
+    setPassword(e.target.value);
 }
+
 
     return <div>
         <div className="container1 container">
