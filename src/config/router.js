@@ -6,6 +6,8 @@ import {createBrowserRouter,RouterProvider,Outlet,useNavigate} from "react-route
 import { useState,useEffect } from "react";
 import  Dashboard  from "../views/Dashboard/Dashboard";
 import Navbar from "../components/Navbar";
+import Login from "../views/Login/Login";
+import SignUp from "../views/Signup/Signup";
 
 
 const router = createBrowserRouter([
@@ -20,14 +22,14 @@ const router = createBrowserRouter([
             
                 ]
     },
-    // {
-    //     path: '/login',
-    //     element: <Login/>
-    // },
-    // {
-    // path: '/signup',
-    // element: <SignUp/>
-    // },
+    {
+        path: '/login',
+        element: <Login/>
+    },
+    {
+    path: '/signup',
+    element: <SignUp/>
+    },
   
     
 ]);

@@ -1,16 +1,53 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail} from "firebase/auth";
+import { getFirestore,collection, getDocs,doc, getDoc,addDoc,setDoc,where, query } from "firebase/firestore";
+import { auth,db } from "./firconfig";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyB5OmB6U8GT5whx_hn545YJzl6tIo2vuH4",
-    authDomain: "smit-hackthon.firebaseapp.com",
-    projectId: "smit-hackthon",
-    storageBucket: "smit-hackthon.appspot.com",
-    messagingSenderId: "77043843822",
-    appId: "1:77043843822:web:9c41d2fc9083bc93f229ff"
-  };
 
-  // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBLqwOxwbWF89ZVE-Hx6Oauw9eIuy8Syp0",
+//   authDomain: "test-project-67367.firebaseapp.com",
+//   projectId: "test-project-67367",
+//   storageBucket: "test-project-67367.appspot.com",
+//   messagingSenderId: "986217264801",
+//   appId: "1:986217264801:web:ed5c55b76ba4fe71a322e0"
+// };
+
+//   // Initialize Firebase
+//   const app = initializeApp(firebaseConfig);
+//   const auth = getAuth(app);
+//   const db = getFirestore(app);
+  
+
+
+
+
+  export async function SignSetup({ email, password, name }) {
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password,name);
+      // console.log(res);
+      await setDoc(doc(db, "users", res.user.uid), {
+        name,
+        email
+      });
+      return res;
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+  
+  export async function LoginSetup({ email, password }) {
+    try {
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      console.log(res);
+      return res;
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+  
+
+
+// export { auth };
